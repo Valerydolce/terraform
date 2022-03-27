@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|  
+    #load the centos box
+  config.vm.box = "centos/7"
+
+    #Assign a private IP to the box 
+  config.vm.network "private_network", ip: "192.168.50.10"
+
+    #change the value of the SSH configuration file, then restart the ssh service
+config.vm.provision "shell", inline: <<-SHELL
+
+sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+sudo systemctl restart sshd
+ 
+  
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  SHELL
+end

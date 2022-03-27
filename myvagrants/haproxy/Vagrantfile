@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/bionic64"
+  #config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--memory", 256]
+  end
+# Spin the HAPROXY server
+  config.vm.define :haproxy, primary: true do |haproxy_config|
+
+    haproxy_config.vm.hostname = 'haproxy'
+    haproxy_config.vm.network :forwarded_port, guest: 8080, host: 8089
+    haproxy_config.vm.network :forwarded_port, guest: 80, host: 8088
+
+    haproxy_config.vm.network :private_network, ip: "192.168.210.40"
+
+  end
+
+# Spin Webserver1 named web1
+  config.vm.define :web1 do |web1_config|
+
+    web1_config.vm.hostname = 'web1'
+    web1_config.vm.network :private_network, ip: "192.168.210.41"
+
+  end
+
+# Spin Webserver2 named web2
+  config.vm.define :web2 do |web2_config|
+
+    web2_config.vm.hostname = 'web2'
+    web2_config.vm.network :private_network, ip: "192.168.210.42"
+
+  end
+end
