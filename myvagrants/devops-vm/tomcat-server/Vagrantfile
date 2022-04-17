@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+ 
+    #Virtual Machine settings
+  
+    config.vm.box = "centos/7"
+    config.vm.hostname = "tomcat-server"
+  
+    #Provider settings
+  
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.name = "tomcat-server"
+      vb.cpus = 2
+    end  
+
+    #Network Settings
+     #config.vm.network "forwarded_port", guest: 80, host: 8080
+    # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    config.vm.network "private_network", ip: "172.28.33.150"
+    # config.vm.network "public_network"
+
+end
